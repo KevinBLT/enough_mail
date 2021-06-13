@@ -43,12 +43,12 @@ abstract class ClientBase {
   ///
   /// Specify [isSecure] if you do not want to connect to a secure service.
   Future<ConnectionInfo> connectToServer(String host, int port,
-      {bool isSecure = true}) async {
+      {bool isSecure = true, bool Function(X509Certificate) onBadCertificate = null}) async {
     log('connecting to server $host:$port - secure: $isSecure',
         initial: initialApp);
     connectionInfo = ConnectionInfo(host, port, isSecure);
     var socket = isSecure
-        ? await SecureSocket.connect(host, port)
+        ? await SecureSocket.connect(host, port, onBadCertificate : onBadCertificate)
         : await Socket.connect(host, port);
     _greetingsCompleter = Completer<ConnectionInfo>();
     connect(socket);
