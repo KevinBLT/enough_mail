@@ -279,14 +279,14 @@ class PartBuilder {
   /// Adds another header with the specified [name] with the given mail [addresses] as its value
   void addMailAddressHeader(String name, List<MailAddress> addresses) {
     if (addresses != null) {
-      addHeader(name, addresses.map((a) => a.encode()).join('; '));
+      addHeader(name, addresses.map((a) => a.encode()).join(', '));
     }
   }
 
   /// Adds the header with the specified [name] with the given mail [addresses] as its value
   void setMailAddressHeader(String name, List<MailAddress> addresses) {
     if (addresses != null) {
-      setHeader(name, addresses.map((a) => a.encode()).join('; '));
+      setHeader(name, addresses.map((a) => a.encode()).join(', '));
     }
   }
 

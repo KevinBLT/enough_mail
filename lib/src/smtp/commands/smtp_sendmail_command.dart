@@ -55,9 +55,10 @@ class SmtpSendMailCommand extends SmtpCommand {
         _currentStep = SmtpSendCommandSequence.done;
 
         // Build the message but strip the bcc header
-        var data = _message.renderMessage().replaceAll(
-          RegExp('^Bcc:.*\r\n', multiLine: true), ''
-        );
+        var bcc      = _message.bcc;
+        _message.bcc = [];
+        var data     = _message.renderMessage();
+        _message.bcc = _message.bcc;
 
         // \r\n.\r\n is the data stop sequence, so 'pad' this sequence in the message data
         return data.replaceAll('\r\n.\r\n', '\r\n..\r\n') + '\r\n.';
