@@ -29,8 +29,15 @@ class QuotedPrintableMailCodec extends MailCodec {
       if ((rune >= 32 && rune <= 60) ||
           (rune >= 62 && rune <= 126) ||
           rune == 9) {
+        
         buffer.writeCharCode(rune);
         lineCharacterCount++;
+
+        if (rune == 46) {
+          buffer.writeCharCode(rune);
+          lineCharacterCount++;
+        }
+
       } else {
         if (i < runeCount - 1 &&
             rune == AsciiRunes.runeCarriageReturn &&
