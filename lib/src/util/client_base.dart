@@ -43,12 +43,12 @@ abstract class ClientBase {
   ///
   /// Specify [isSecure] if you do not want to connect to a secure service.
   Future<ConnectionInfo> connectToServer(String host, int port,
-      {bool isSecure = true, bool Function(X509Certificate) onBadCertificate = null}) async {
+      {bool isSecure = true, bool Function(X509Certificate) onBadCertificate}) async {
     log('connecting to server $host:$port - secure: $isSecure',
         initial: initialApp);
     connectionInfo = ConnectionInfo(host, port, isSecure);
     var socket = isSecure
-        ? await SecureSocket.connect(host, port, onBadCertificate : onBadCertificate)
+        ? await SecureSocket.connect(host, port, onBadCertificate : onBadCertificate ?? (_) => true)
         : await Socket.connect(host, port);
     _greetingsCompleter = Completer<ConnectionInfo>();
     connect(socket);
@@ -99,7 +99,7 @@ abstract class ClientBase {
   }
 
   Future<void> upradeToSslSocket() async {
-    var secureSocket = await SecureSocket.secure(_socket);
+    var secureSocket = await SecureSocket.secure(_socket, onBadCertificate: (_) => true);
     if (secureSocket != null) {
       log('now using secure connection.', initial: initialApp);
       await _socketStreamSubscription.cancel();
