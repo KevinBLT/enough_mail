@@ -119,7 +119,11 @@ abstract class ClientBase {
       final serverGreeting = String.fromCharCodes(data);
       log(serverGreeting, isClient: false);
       onConnectionEstablished(connectionInfo, serverGreeting);
-      _greetingsCompleter?.complete(connectionInfo);
+
+      if (_greetingsCompleter != null && !_greetingsCompleter.isCompleted) {
+        _greetingsCompleter?.complete(connectionInfo);
+      }
+      
     }
   }
 
